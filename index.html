@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上岸护航队：后勤保卫战</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 动态背景层 -->
+    <div id="dynamic-bg">
+        <div id="bg-slideshow">
+            <!-- Images will be injected by JS -->
+        </div>
+        <div class="bg-overlay"></div> <!-- Darken overlay for readability -->
+    </div>
+
+    <div class="app-container">
+        
+        <!-- 场景0：游戏标题画面 -->
+        <div id="scene-start" class="scene active">
+            <div class="title-container">
+                <div class="logo-icon">🎓</div>
+                <h1 class="game-title">上岸护航队</h1>
+                <h2 class="game-subtitle">后勤保卫战</h2>
+            </div>
+            <div class="start-menu">
+                <button class="btn-gamestart" onclick="game.enterLobby()">开始护航</button>
+            </div>
+            <p class="copyright">© 2025 考研后勤部出品</p>
+        </div>
+
+        <!-- 场景1：后勤大厅 -->
+        <div id="scene-lobby" class="scene">
+            <!-- 顶部栏：天数与资金 -->
+            <div class="game-top-bar">
+                <div class="status-badge day-badge">
+                    <span class="icon">📅</span>
+                    <span id="day-display">Day 1</span>
+                </div>
+                <div class="theme-switch">
+                    <button onclick="game.setTheme('day')" title="白昼模式">☀️</button>
+                    <button onclick="game.setTheme('dusk')" title="黄昏模式">🌇</button>
+                    <button onclick="game.setTheme('night')" title="夜晚模式">🌙</button>
+                </div>
+                <div class="status-badge money-badge">
+                    <span class="icon">💰</span>
+                    <span id="money-display">2000</span>
+                </div>
+            </div>
+
+            <div class="lobby-content">
+                <!-- 左侧：考生状态 -->
+                <div class="panel student-panel">
+                    <div class="student-avatar">
+                        <div class="avatar-face">🎓</div>
+                        <div class="avatar-mood" id="avatar-mood">😐</div>
+                    </div>
+                    <h3>考生状态</h3>
+                    <div class="stats-list">
+                        <div class="stat-item">
+                            <span class="label">身体</span>
+                            <div class="bar-bg"><div id="health-bar" class="bar-fill health" style="width: 100%"></div></div>
+                            <span id="health-val" class="val">100</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">心态</span>
+                            <div class="bar-bg"><div id="mood-bar" class="bar-fill mood" style="width: 100%"></div></div>
+                            <span id="mood-val" class="val">100</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">知识</span>
+                            <div class="bar-bg"><div id="knowledge-bar" class="bar-fill knowledge" style="width: 0%"></div></div>
+                            <span id="knowledge-val" class="val">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧：后勤采购 -->
+                <div class="panel market-panel">
+                    <div class="panel-header">
+                        <h3>📦 后勤补给站</h3>
+                        <p>合理采购，助力上岸</p>
+                    </div>
+                    <div class="market-grid">
+                        <div class="market-card" onclick="game.buyItem('meal')">
+                            <div class="card-icon">🍱</div>
+                            <div class="card-info">
+                                <h4>豪华套餐</h4>
+                                <div class="price">150</div>
+                            </div>
+                            <div class="card-desc">健康++ 心情+</div>
+                        </div>
+                        <div class="market-card" onclick="game.buyItem('coffee')">
+                            <div class="card-icon">☕</div>
+                            <div class="card-info">
+                                <h4>提神咖啡</h4>
+                                <div class="price">80</div>
+                            </div>
+                            <div class="card-desc">移动速度UP</div>
+                        </div>
+                        <div class="market-card" onclick="game.buyItem('notes')">
+                            <div class="card-icon">📝</div>
+                            <div class="card-info">
+                                <h4>学霸笔记</h4>
+                                <div class="price">200</div>
+                            </div>
+                            <div class="card-desc">知识获取UP</div>
+                        </div>
+                        <div class="market-card" onclick="game.buyItem('game')">
+                            <div class="card-icon">🎮</div>
+                            <div class="card-info">
+                                <h4>摸鱼时刻</h4>
+                                <div class="price">50</div>
+                            </div>
+                            <div class="card-desc">心情++ 知识-</div>
+                        </div>
+                    </div>
+                    <button class="btn-action-big" onclick="game.showGuide()">🚀 开始今日复习</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 场景2：闯关游戏 -->
+        <div id="scene-game" class="scene">
+            <div class="game-hud">
+                <div class="level-badge">
+                    <span class="icon">🚩</span>
+                    <span id="level-name">备考启动期</span>
+                </div>
+                <button class="btn-quit" onclick="game.quitLevel()">❌ 放弃</button>
+            </div>
+            
+            <div class="game-viewport">
+                <canvas id="gameCanvas" width="800" height="450"></canvas>
+                <!-- 结算界面 -->
+                <div id="game-overlay" class="game-overlay hidden">
+                    <div class="result-card">
+                        <h2 id="overlay-title">挑战成功!</h2>
+                        <div class="result-stats" id="overlay-desc">
+                            <!-- JS will fill this -->
+                        </div>
+                        <button class="btn-confirm" onclick="game.returnToLobby()">返回后勤部</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-bar">
+                <div class="key-hint">⬅️ ➡️ 移动</div>
+                <div class="key-hint">SPACE / UP 跳跃</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 指南弹窗 -->
+    <div id="modal-guide" class="modal hidden">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h2>🎮 操作指南</h2>
+            </div>
+            <div class="modal-body">
+                <div class="control-visuals">
+                    <div class="control-group">
+                        <div class="key-row">
+                            <span class="key-cap">A</span>
+                            <span class="key-cap">D</span>
+                        </div>
+                        <span>左右移动</span>
+                    </div>
+                    <div class="control-group">
+                        <span class="key-cap wide">SPACE</span>
+                        <span>跳跃 / 踩怪</span>
+                    </div>
+                </div>
+                <ul class="game-rules">
+                    <li>📚 <b>收集书本</b>：增加知识储备 (核心目标)</li>
+                    <li>📱 <b>躲避手机</b>：碰到会分心 (扣心情)</li>
+                    <li>💤 <b>踩扁瞌睡</b>：跳跃踩头消灭瞌睡虫</li>
+                    <li>☕ <b>咖啡/笔记</b>：购买后自动生效</li>
+                </ul>
+            </div>
+            <button class="btn-start-level" onclick="game.startLevel()">出 发 !</button>
+        </div>
+    </div>
+
+    <!-- 奖励弹窗 -->
+    <div id="modal-reward" class="modal hidden">
+        <div class="modal-window reward-window">
+            <div class="modal-header">
+                <h2>🎉 恭喜通关！</h2>
+            </div>
+            <div class="modal-body">
+                <div class="reward-content">
+                    <div id="reward-gallery" class="reward-gallery">
+                        <!-- Images injected by JS -->
+                    </div>
+                    <p id="reward-text" class="reward-text">为考研学子增加了一条服务！</p>
+                </div>
+            </div>
+            <button class="btn-confirm" onclick="game.closeReward()">太棒了！</button>
+        </div>
+    </div>
+
+    <!-- 消息提示 -->
+    <div id="toast" class="toast hidden">消息提示</div>
+
+    <!-- 音效控制按钮 -->
+    <button id="btn-music" class="btn-music" onclick="game.toggleAudio()" title="开关音乐">
+        🔇
+    </button>
+
+    <script src="audio.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
