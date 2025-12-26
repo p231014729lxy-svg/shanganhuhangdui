@@ -87,6 +87,10 @@ class Game {
                 imgs: ['assets/reward_5.jpg'], 
                 text: '恭喜通过第五关！\n解锁服务：【研考服务站】\n累了困了？来这里补充能量！' 
             },
+            6: { 
+                imgs: ['assets/reward_6.jpg'], 
+                text: '恭喜通过第六关！\n解锁服务：【暖心大礼包】\n全心全意，为你保驾护航！' 
+            },
             7: { 
                 imgs: ['assets/reward_7.jpg'], 
                 text: '恭喜通关！\n解锁服务：【下一站，上岸】\n星光不负赶路人，你一定能行！' 
