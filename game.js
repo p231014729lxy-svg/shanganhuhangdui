@@ -614,20 +614,23 @@ class PlatformerGame {
         // Ground
         // Length increases with difficulty
         const totalLength = 1500 + (difficulty * 200); 
-        this.platforms.push({ x: 0, y: 400, width: totalLength + 500, height: 50 });
+        // 抬高地面高度，避免被手机端底部按钮遮挡 (原y:400)
+        const groundY = 320; 
+        this.platforms.push({ x: 0, y: groundY, width: totalLength + 500, height: 130 }); // 增加厚度填满底部
 
         // Platforms & Obstacles
         let currentX = 300;
         
         while (currentX < totalLength) {
-            const y = 250 + Math.random() * 100; // Height variation
+            // 调整平台生成高度范围 (原250-350 -> 改为 180-280)
+            const y = 180 + Math.random() * 100; 
             const width = 100 + Math.random() * 150;
             
             // Add Platform
             this.platforms.push({ x: currentX, y: y, width: width, height: 20 });
 
-            // 1. Items (Books) - More needed in later levels
-            if (Math.random() > 0.4) { // 减少书本生成 (原>0.3)
+            // 1. Items (Books)
+            if (Math.random() > 0.4) {
                 this.items.push({
                     x: currentX + width / 2 - 15,
                     y: y - 40,
@@ -638,9 +641,8 @@ class PlatformerGame {
                 });
             }
 
-            // 2. Enemies - Difficulty scales quantity and types
-            // More enemies and faster
-            const enemyChance = 0.4 + (difficulty * 0.08); // 增加敌人生成概率 (原0.3 + diff*0.05)
+            // 2. Enemies
+            const enemyChance = 0.4 + (difficulty * 0.08);
             
             if (Math.random() < enemyChance) {
                 const enemyType = Math.random() > 0.5 ? 'phone' : 'sleep';
@@ -653,18 +655,18 @@ class PlatformerGame {
                     symbol: enemyType === 'phone' ? '📱' : '💤',
                     patrolStart: currentX,
                     patrolEnd: currentX + width,
-                    speed: 1.0 + (difficulty * 0.15), // 显著降低敌人速度 (原2.5+diff*0.3)
+                    speed: 1.0 + (difficulty * 0.15),
                     dir: 1
                 });
             }
 
-            // Gap between platforms (Wider gaps)
-            const gap = 80 + Math.random() * (60 + difficulty * 15); // 增加间隙 (原50)
+            // Gap between platforms
+            const gap = 80 + Math.random() * (60 + difficulty * 15);
             currentX += width + gap;
         }
 
-        // Finish Line
-        this.goal = { x: totalLength + 50, y: 350, width: 50, height: 50, symbol: '🏁' };
+        // Finish Line (调整终点高度)
+        this.goal = { x: totalLength + 50, y: groundY - 50, width: 50, height: 50, symbol: '🏁' };
         
         // Camera
         this.camera = { x: 0 };

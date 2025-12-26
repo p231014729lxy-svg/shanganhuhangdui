@@ -963,31 +963,171 @@ body.theme-night { --bg-sky-top: #240046; --panel-shadow: #7B2CBF; }
 
 /* Media Query for Mobile - Refined */
 @media (max-width: 1024px) {
-    .game-viewport {
+    #scene-lobby {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .game-top-bar {
+        padding: 8px;
+        flex-shrink: 0;
         width: 100%;
-        height: 50vh; /* Adjust height for mobile */
-        border-width: 2px;
+    }
+
+    .lobby-content {
+        flex-direction: column;
+        padding-bottom: 0;
+        flex: 1; 
+        overflow: hidden; 
+        gap: 15px; /* Increase gap slightly */
+        width: 100%;
+        align-items: center; /* Center align items to ensure same width */
+    }
+
+    /* Common width for panels */
+    .panel {
+        width: 95%; /* Use 95% width for both panels */
+        flex-shrink: 0;
+        box-sizing: border-box; /* Include padding in width */
+        padding: 10px; /* Override desktop 25px padding globally for mobile panels */
+        border-width: 3px; /* Thinner border */
+        border-radius: 15px; /* Smaller radius */
+        box-shadow: 4px 4px 0 var(--panel-shadow); /* Smaller shadow */
+    }
+
+    /* Student Panel - Takes ~30-35% */
+    .student-panel {
+        width: 100%;
+        margin: 0;
+        
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        
+        /* Explicit height allocation */
+        flex: 3; /* Ratio 3 */
+        min-height: 0; /* Allow flex to shrink if needed */
+        
+        background: #fff;
+    }
+
+    /* Market Panel - Takes ~65-70% & Full Width */
+    .market-panel {
+        width: 100%; /* Ensure full width */
+        margin: 0;
+        
+        flex: 7; /* Ratio 7 */
+        height: auto; 
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 15px;
+        
+        /* Remove rounded corners at top to connect with panel above if desired, 
+           or keep separate. Let's keep them separate but tight. */
+        border-radius: 15px 15px 0 0; /* Flat bottom */
+        border-bottom: none;
+    }
+
+    .market-header {
+        flex-shrink: 0;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+    }
+
+    .market-grid {
+        display: grid;
+        grid-template-columns: 1fr; /* Single column */
+        gap: 15px;
+        overflow-y: auto; /* Scroll ONLY items */
+        flex: 1; /* Take available space */
+        padding: 5px; /* Space for shadows */
+        margin-bottom: 10px;
+    }
+
+    .btn-action-big {
+        flex-shrink: 0; /* Don't shrink */
+        margin-top: 0;
+        margin-bottom: 0;
+        width: 100%;
+        padding: 15px;
+        font-size: 1.2rem; /* Slightly smaller text for mobile */
+    }
+    
+    /* --- Scene 2: Game Mobile Fix --- */
+    #scene-game {
+        position: fixed; /* Force fixed full screen */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Center Vertically */
+        align-items: center;     /* Center Horizontally */
+        background: #2B2D42; /* Dark background */
+        overflow: hidden;
     }
 
     .game-hud {
-        width: 95%;
-        font-size: 0.8rem;
+        position: absolute;
+        top: 10px;
+        left: 0;
+        width: 100%;
+        padding: 0 15px;
+        z-index: 100;
+        justify-content: space-between;
     }
 
-    /* Adjust lobby for mobile */
-    .lobby-content {
-        flex-direction: column;
+    .game-viewport {
+        /* Full width, aligned left */
+        width: 100%; 
+        margin: 0; 
+        
+        /* Force height to be larger, ignoring aspect ratio */
+        height: 60vh; /* Taller */
+        aspect-ratio: auto; 
+        
+        border: none;
+        border-radius: 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        background: #87CEEB;
+        position: relative;
+        overflow-x: hidden; /* Prevent horizontal scroll bar */
+    }
+
+    /* Make canvas wider than the screen to stretch horizontally */
+    #gameCanvas {
+        width: 100%; /* Match parent width exactly */
+        margin-left: 0; /* Reset margin */
+        height: 100%;
+        object-fit: fill; 
+        transform: scaleX(1.3); /* Only stretch via transform */
+        transform-origin: left center; /* STRICTLY anchor to left edge */
+    }
+
+    /* Controls overlay on bottom of screen, not viewport */
+    .touch-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        width: 100%;
+        padding: 0 30px;
+        max-width: none;
+        transform: none;
+        z-index: 200;
     }
     
-    .game-top-bar {
-        padding: 10px;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: center;
-    }
-
-    .status-badge {
-        font-size: 0.9rem;
+    /* Hide Student Panel Title on Mobile to prevent squashing */
+    .student-panel h3 {
+        display: none !important;
     }
 }
 
